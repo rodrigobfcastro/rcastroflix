@@ -30,8 +30,9 @@ function CadastroCategoria() {
     );
   }
   useEffect(() => {
-    console.log('Alo Alo Brasil');
-    const URL_TOP = 'http://localhost:8080/categorias';
+    const URL_TOP = window.location.hostname.includes('localhost')
+      ? 'http://localhost:8080/categorias'
+      : 'https://rcastroflix.herokuapp.com/categorias/';
     fetch(URL_TOP).then(async (respostaDoServidor) => {
       const resposta = await respostaDoServidor.json();
       console.log(resposta);
