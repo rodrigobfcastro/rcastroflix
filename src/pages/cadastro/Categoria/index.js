@@ -3,39 +3,23 @@ import { Link } from 'react-router-dom';
 import PageDefault from '../../../components/PageDefault';
 import FormField from '../../../components/FormFields';
 import Button from '../../../components/Button';
+import useForm from '../../../hooks/useForm';
 
 function CadastroCategoria() {
-  const [categorias, setCategorias] = useState([]);
   const valoresIniciais = {
     nome: '',
     descricao: '',
     cor: '#000000',
   };
+  const { handleChange, values, clearForm } = useForm(valoresIniciais);
+  const [categorias, setCategorias] = useState([]);
 
-  const [values, setValues] = useState(valoresIniciais);
-  function setValue(chave, valor) {
-    setValues({
-      ...values,
-      [chave]: valor,
-    });
-  }
-  function handleChange(infosDoEvento) {
-    // const { getAttribute, value } = infosDoEvento.target;
-    setValue(
-      // prettierIgnore
-      // getAttribute('name'),
-      // value
-      infosDoEvento.target.getAttribute('name'),
-      infosDoEvento.target.value
-    );
-  }
   useEffect(() => {
     const URL_TOP = window.location.hostname.includes('localhost')
       ? 'http://localhost:8080/categorias'
       : 'https://rcastroflix.herokuapp.com/categorias/';
     fetch(URL_TOP).then(async (respostaDoServidor) => {
       const resposta = await respostaDoServidor.json();
-      console.log(resposta);
       setCategorias([...resposta]);
     });
   }, []);
@@ -51,7 +35,7 @@ function CadastroCategoria() {
         onSubmit={function handleSubmit(evt) {
           evt.preventDefault();
           setCategorias([...categorias, values]);
-          setValues(valoresIniciais);
+          clearForm(valoresIniciais);
         }}
       >
         <FormField
